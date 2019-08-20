@@ -13,8 +13,8 @@ namespace Sudoku.Classes
         static object fakeLocker = new object();
 
 
-        //GetCurrentGrid - возвращает текущую игровую матрицу. Если ее нет, то сначала создает новую
-        public static int[,] GetCurrentMatrix()
+        //GetPlayingMatrix - возвращает текущую игровую матрицу. Если ее нет, то сначала создает новую
+        public static int[,] GetPlayingMatrix()
         {
             if (playingMatrix == null)
             {

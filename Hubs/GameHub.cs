@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using Microsoft.AspNet.SignalR;
 using Sudoku.Classes;
@@ -12,23 +13,6 @@ namespace Sudoku.Hubs
     {
         static List<Player> players = new List<Player>();
         static object fakeLocker = new object();
-
-        //Новая игра
-        public void StartNewGame(int level)
-        {
-            var grid = Matrix.GenerateNew(level);
-
-            Clients.All.onNewGameStarted(grid);
-        }
-
-        //Возвращает текущую матрицу
-        public void GetCurrentGrid()
-        {
-            var grid = Matrix.GetCurrentMatrix();
-
-            //Посылаем игровую матрицу текущему пользователю
-            Clients.Caller.onGetCurrentGrid(grid);
-        }
 
         //Подключение нового пользователя
         public void Connect()
@@ -46,6 +30,24 @@ namespace Sudoku.Hubs
             }
         }
 
+        //Новая игра
+        public void StartNewGame(int level)
+        {
+            var matrix = Matrix.GenerateNew(level);
+
+            //Посылаем игровую матрицу всем пользователям
+            Clients.All.onNewGameStarted(matrix);
+        }
+
+        //Возвращает текущую матрицу
+        public void GetPlayingMatrix()
+        {
+            var matrix = Matrix.GetPlayingMatrix();
+
+            //Посылаем игровую матрицу текущему пользователю
+            Clients.Caller.onGetPlayingMatrix(matrix);
+        }
+
         //Проверяем переданное значение. Если оно правильное, то записываем его в текущую матрицу
         public void AddNumber(int number, int row, int col)
         {
@@ -55,7 +57,7 @@ namespace Sudoku.Hubs
 
             if (numberIsCorrect)
             {
-                //Добавляем в текущую таблицу новый номер
+                //Добавляем в текущую матрицу новый номер
                 var numberAdded = Matrix.AddNumber(number, row, col);
 
                 if (numberAdded)
@@ -105,14 +107,14 @@ namespace Sudoku.Hubs
             Clients.All.onGetHint(number, row, col);
         }
 
-        //Показать результаты
+        //Показать 10 лучших результатов
         public void GetResults()
         {
             Clients.Caller.onGetResults(players.OrderByDescending(x => x.WinsCount).Take(10).ToList());
         }
 
         //Отключение пользователя
-        public override System.Threading.Tasks.Task OnDisconnected(bool stopCalled)
+        public override Task OnDisconnected(bool stopCalled)
         {
             var item = players.FirstOrDefault(x => x.ConnectionId == Context.ConnectionId);
 

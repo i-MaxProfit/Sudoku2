@@ -17,8 +17,8 @@ $(function () {
     };
 
     //onNewGameStarted - Вызывается после нажания Новая игра. Заполняем таблицу
-    game.client.onNewGameStarted = function (grid) {
-        updateGrid(grid);
+    game.client.onNewGameStarted = function (matrix) {
+        updateGrid(matrix);
     };
 
     //onCorrentNumberAdded - Вызывается после добавления правильного значения любым пользователем, в т.ч. и текущим
@@ -50,9 +50,9 @@ $(function () {
         }
     };
 
-    //onGetCurrentGrid - Вызывается при загрузке страницы. Заполняем таблицу
-    game.client.onGetCurrentGrid = function (grid, connectionId) {
-        updateGrid(grid);
+    //onGetPlayingMatrix - Вызывается при загрузке страницы. Заполняем таблицу
+    game.client.onGetPlayingMatrix = function (matrix, connectionId) {
+        updateGrid(matrix);
     };
 
     //onNameChanged - Вызывается после изменения имени
@@ -174,7 +174,7 @@ $(function () {
         });
 
         //Получаем текущую игру или создаем новую
-        game.server.getCurrentGrid();
+        game.server.getPlayingMatrix();
 
         //Добавляем нового пользователя в список игроков
         game.server.connect();
@@ -213,12 +213,12 @@ $(function () {
     }
 
     //Обновляет все значение в таблице
-    function updateGrid(grid) {
+    function updateGrid(matrix) {
 
         for (var row = 0; row < 9; row++) {
             for (var col = 0; col < 9; col++) {
 
-                let val = grid[row][col];
+                let val = matrix[row][col];
                 let cell = $('#c' + row + col);
 
                 if (val === 0) {
