@@ -26,7 +26,7 @@ namespace Sudoku.Hubs
         {
             var grid = Matrix.GetCurrentMatrix();
 
-            //Посылаем сообщение текущему пользователю
+            //Посылаем игровую матрицу текущему пользователю
             Clients.Caller.onGetCurrentGrid(grid);
         }
 
@@ -79,7 +79,7 @@ namespace Sudoku.Hubs
             }
             else
             {
-                //Сообщаем текущему пользователю, что значение неверное
+                //Сообщаем текущему пользователю, что но ввел неверное значение
                 Clients.Caller.onWrongNumberAdded(number, row, col);
             }
         }

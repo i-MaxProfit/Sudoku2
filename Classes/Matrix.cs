@@ -13,7 +13,55 @@ namespace Sudoku.Classes
         static object fakeLocker = new object();
 
 
-        //Init - генерирует новую игровую матрицу
+        //GetCurrentGrid - возвращает текущую игровую матрицу. Если ее нет, то сначала создает новую
+        public static int[,] GetCurrentMatrix()
+        {
+            if (playingMatrix == null)
+            {
+                lock (fakeLocker)
+                {
+                    if (playingMatrix == null)
+                    {
+                        Initialization();
+                    }
+                }
+            }
+
+            return playingMatrix;
+        }
+
+        //AddNumber - Проверяем на правильность переданное значение и добавляем его в игровую таблицу, если оно верное. Вызывается, когда пользователь ввел какое-то число
+        public static bool AddNumber(int number, int row, int col)
+        {
+            lock (fakeLocker)
+            {
+                //Ячейка еще пустая
+                if (playingMatrix[row, col] == 0)
+                {
+                    playingMatrix[row, col] = number;
+
+                    //Проверяем закончена ли игра
+                    gameOver = !playingMatrix.ContainsValue(0);
+
+                    return true;
+                }
+                //Кто-то уже успел чуть раньше заполнить эту ячейку
+                else
+                {                    
+                    return false;
+                }
+            }
+        }
+
+        //GenerateNew - Генерирует новую матрицу по кнопке "Новая игра"
+        public static int[,] GenerateNew(int level)
+        {
+            Initialization(level);
+
+            return playingMatrix;
+        }
+
+        //Initialization - генерирует новую игровую матрицу
         private static void Initialization(int level = 25)
         {
             gameOver = false;
@@ -65,7 +113,7 @@ namespace Sudoku.Classes
                 }
             }
 
-            //3. Копируем оригинальную таблицу в игровую (для отправки пользователям) и закрываем в ней 25 ячеек
+            //3. Копируем оригинальную таблицу в игровую (для отправки пользователям) и закрываем в ней N ячеек
             Array.Copy(solvedMatrix, playingMatrix, solvedMatrix.Length);
 
             for (int i = 0; i < level; i++)
@@ -83,32 +131,10 @@ namespace Sudoku.Classes
             return solvedMatrix[row,col] == number;
         }
 
-        //GetNumber - возвращает значение по переданные координам. Используется, когда пользователь нажал "Подсказка"
+        //GetNumber - возвращает значение по переданным координатам. Используется, когда пользователь нажал "Подсказка"
         public static int GetNumber(int row, int col)
         {
             return solvedMatrix[row, col];
-        }
-
-        //AddNumber - Добавляем в игровую таблицу проверенное значение
-        public static bool AddNumber(int number, int row, int col)
-        {
-            lock (fakeLocker)
-            {
-                if (playingMatrix[row, col] == 0)
-                {
-                    playingMatrix[row, col] = number;
-
-                    //Проверяем закончена ли игра
-                    gameOver = !playingMatrix.ContainsValue(0);
-
-                    return true;
-                }
-                else
-                {
-                    //Кто-то уже успел чуть раньше изменить эту ячейку
-                    return false;
-                }
-            }            
         }
 
         //IsGameOver - возвращает признака окончания текущей игры
@@ -117,29 +143,5 @@ namespace Sudoku.Classes
             return gameOver;
         }
 
-        //GenerateNew - Генерирует новую матрицу
-        public static int[,] GenerateNew(int level)
-        {
-            Initialization(level);
-
-            return playingMatrix;
-        }
-
-        //GetCurrentGrid - возвращает текущую игровую матрицу. Если ее нет, то сначала создает новую
-        public static int[,] GetCurrentMatrix()
-        {
-            if (playingMatrix == null)
-            {
-                lock (fakeLocker)
-                {
-                    if (playingMatrix == null)
-                    {
-                        Initialization();
-                    }                        
-                }
-            }   
-
-            return playingMatrix;
-        }
     }
 }
