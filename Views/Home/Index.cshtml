@@ -1,0 +1,39 @@
+﻿@{
+    ViewBag.Title = "Suboku";
+}
+
+<div class="row matrix">
+    <div class="col-md-1">
+        &nbsp;
+    </div>
+    <div class="col-md-7">
+        <div id="tableDiv"></div>
+    </div>
+    <div class="col-md-2">
+        <div class="row">
+            <input id="userName" />
+        </div>
+        <div class="row">
+            <button id="btnChangeName">Изменить имя</button>
+        </div>
+        <div class="row">
+            <button id="btnNewGame">Новая игра</button>
+        </div>
+        <div class="row">
+            <button id="btnHint">Подсказка</button>
+        </div>
+        <div class="row">
+            <button id="btnGetResults">Результаты</button>
+        </div>
+    </div>
+    <div class="col-md-2">
+        &nbsp;
+    </div>
+</div>
+
+<link href="~/Content/site.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
+<script src="~/Scripts/jquery.signalR-2.4.1.min.js"></script>
+<script src="~/signalr/hubs"></script>
+<script src="~/Scripts/main.js?v4"></script>
+

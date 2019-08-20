@@ -1,0 +1,109 @@
+﻿body {
+    padding-top: 50px;
+    padding-bottom: 20px;
+}
+
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.dl-horizontal dt {
+    white-space: normal;
+}
+
+tbody {
+    border: #666699 solid 2px;
+}
+
+td {
+    vertical-align: middle;
+    font-size: 18pt;
+    font-family: times,serif;
+}
+
+.cell {
+    border: none;
+    height: 70px;
+    width: 70px;
+    text-align: center;
+    font-size: xx-large;
+}
+
+    .cell:focus {
+        outline: none;
+    }
+
+.g0 {
+    border-top: #666699 solid 2px;
+    border-left: #666699 solid 2px;
+}
+
+.f0 {
+    border-top: #666699 solid 2px;
+    border-bottom: #DDDDEE solid 1px;
+    border-left: #DDDDEE solid 1px;
+}
+
+.e0 {
+    border-left: #666699 solid 2px;
+    border-top: #DDDDEE solid 1px;
+    border-right: #DDDDEE solid 1px;
+    border-bottom: #DDDDEE solid 1px;
+}
+
+.c0 {
+    border-left: #DDDDEE solid 1px;
+    border-top: #DDDDEE solid 1px;
+    border-right: #DDDDEE solid 1px;
+    border-bottom: #DDDDEE solid 1px;
+}
+
+.correct-number {
+    color: green;
+    font-weight: 700;
+}
+
+.wrong-number {
+    color: red;
+    font-weight: 700;
+    border: dashed;
+}
+
+#userName {
+    width: 100%;
+    height: 35px;
+    text-align: left;
+    font-size: x-large;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    border-bottom: #DDDDEE solid 1px;
+    margin-bottom: 10px;
+}
+
+#tableDiv {
+    text-align: right;
+}
+
+button {
+    width: 100%;
+    padding: 4px;
+    margin-bottom: 10px;
+}
+
+.matrix {
+    padding-top: 50px;
+}
+
+.swal2-title {
+    padding-bottom: 10px;
+}
+
+.result-table {
+    width: 100%;
+}
+
+.result-tbody {
+    border: none;
+}
