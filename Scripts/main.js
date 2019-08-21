@@ -57,7 +57,8 @@ $(function () {
 
     //onNameChanged - Вызывается после изменения имени
     game.client.onNameChanged = function (name) {
-        Swal.fire('Привет, ' + name + '!', 'Выше имя изменено!', 'success');
+        $('#userName').val(name);
+        Swal.fire('Привет, ' + name + '!', 'Ваше имя изменено!', 'success');
     };
 
     //onGetResults - Вызывается при показе результатов
@@ -86,12 +87,15 @@ $(function () {
         $(".cell").keydown(function (e) {
             //Только цифры от 1 до 9
             let val = String.fromCharCode(e.keyCode);
-            if (val >= 1 && val <= 9) {
+            if ((val >= 1 && val <= 9)) {
                 let id = $(this).prop('id');
                 let row = id.substring(1, 2);
                 let col = id.substring(2, 3);
 
                 game.server.addNumber(val, row, col);
+            //backspace или delete
+            } else if (e.keyCode === 8 || e.keyCode === 46) {
+                return true;
             }
             else {
                 return false;
@@ -108,12 +112,19 @@ $(function () {
 
         //Кнопка: Изменить имя
         $('#btnChangeName').click(function () {
-            var userName = $('#userName').val();
-            if (userName === '') {
-                Swal.fire('Ошибка!', 'Имя не указано', 'error');
-            } else {
-                game.server.changeName(userId, userName);
-            }
+            Swal.fire({
+                title: 'Введите ваше имя',
+                input: 'text',
+                inputValue: $('#userName').val(),
+                showCancelButton: true,
+                inputValidator: (value) => {
+                    if (!value) {
+                        return 'Имя не может быть пустым!';
+                    } else {
+                        game.server.changeName(userId, value);
+                    }
+                }
+            });
         });
 
         //Кнопка: Начать новую игру

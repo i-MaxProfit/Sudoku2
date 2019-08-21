@@ -80,6 +80,8 @@ td {
     border-right: none;
     border-bottom: #DDDDEE solid 1px;
     margin-bottom: 10px;
+    background-color: white;
+    text-align: center;
 }
 
 #tableDiv {
