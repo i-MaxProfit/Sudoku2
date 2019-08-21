@@ -58,7 +58,7 @@ $(function () {
     //onNameChanged - Вызывается после изменения имени
     game.client.onNameChanged = function (name) {
         Swal.fire('Привет, ' + name + '!', 'Выше имя изменено!', 'success');
-    }
+    };
 
     //onGetResults - Вызывается при показе результатов
     game.client.onGetResults = function (results) {
@@ -76,8 +76,8 @@ $(function () {
             showCloseButton: true,
             showCancelButton: false,
             focusConfirm: false
-        })
-    }
+        });
+    };
 
     //ОТКРЫВАЕМ СОЕДИНЕНИЕ
     $.connection.hub.start().done(function () {
@@ -133,25 +133,25 @@ $(function () {
                     'Сложный' +
                     '</button>',
                 onBeforeOpen: () => {
-                    const content = Swal.getContent()
-                    const $ = content.querySelector.bind(content)
+                    const content = Swal.getContent();
+                    const $ = content.querySelector.bind(content);
 
                     $('#easy').addEventListener('click', () => {
                         game.server.startNewGame(3);
                         Swal.close();
-                    })
+                    });
 
                     $('#middle').addEventListener('click', () => {
                         game.server.startNewGame(10);
                         Swal.close();
-                    })
+                    });
 
                     $('#hard').addEventListener('click', () => {
                         game.server.startNewGame(25);
                         Swal.close();
-                    })
+                    });
                 }
-            })
+            });
         });
 
         //Кнопка: Подсказка

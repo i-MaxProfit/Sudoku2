@@ -12,7 +12,6 @@ namespace Sudoku.Hubs
     public class GameHub : Hub
     {
         static List<PlayerModel> players = new List<PlayerModel>();
-        static object fakeLocker = new object();
 
         //Подключение нового пользователя
         public void Connect()
@@ -99,7 +98,7 @@ namespace Sudoku.Hubs
         public void GetHint(int row, int col)
         {
             //Получаем правильное значение для указанной ячейки
-            var number = Matrix.GetNumber(row, col);
+            var number = Matrix.GetHint(row, col);
 
             //У всех пользователей устанавливаем правильное значение
             Clients.All.onGetHint(number, row, col);
@@ -114,14 +113,13 @@ namespace Sudoku.Hubs
         //Отключение пользователя
         public override Task OnDisconnected(bool stopCalled)
         {
-            var item = players.FirstOrDefault(x => x.ConnectionId == Context.ConnectionId);
+            //var item = players.FirstOrDefault(x => x.ConnectionId == Context.ConnectionId);
 
-            if (item != null)
-            {
-                //Players.Remove(item);
-                var id = Context.ConnectionId;
-                Clients.All.onUserDisconnected(id, item.Name);
-            }
+            //if (item != null)
+            //{
+            //    //Players.Remove(item);
+            //    Clients.All.onUserDisconnected(Context.ConnectionId, item.Name);
+            //}
 
             return base.OnDisconnected(stopCalled);
         }

@@ -8,8 +8,8 @@ namespace Sudoku.Classes
 {
     public static class Matrix
     {
-        static int[,] solvedMatrix = null;  //Полностью заполненная таблица. С ней будем сравнивать цифры, введенные пользователями
-        static int[,] playingMatrix = null; //Игровая таблица, в которой закрыты ячейки
+        static int[,] solvedMatrix = null;  //Полностью заполненная матрица. С ней будем сравнивать цифры, введенные пользователями
+        static int[,] playingMatrix = null; //Игровая матрица, в которой закрыты ячейки
         static object fakeLocker = new object();
 
 
@@ -30,7 +30,7 @@ namespace Sudoku.Classes
             return playingMatrix;
         }
 
-        //AddNumber - Проверяем на правильность переданное значение и добавляем его в игровую таблицу, если оно верное. Вызывается, когда пользователь ввел какое-то число
+        //AddNumber - Проверяем на правильность переданное значение и добавляем его в игровую матрицу, если оно верное. Вызывается, когда пользователь ввел какое-то число
         public static AddNumberModel AddNumber(int number, int row, int col)
         {
             lock (fakeLocker)
@@ -132,9 +132,20 @@ namespace Sudoku.Classes
         }
 
         //GetNumber - возвращает значение по переданным координатам. Используется, когда пользователь нажал "Подсказка"
-        public static int GetNumber(int row, int col)
+        public static int GetHint(int row, int col)
         {
-            return solvedMatrix[row, col];
+            int number = 0;
+
+            lock (fakeLocker)
+            {
+                //Получаем из заполненой матрицы нужное значение
+                number = solvedMatrix[row, col];
+
+                //Устанавлием в игровую матрицу правильное значение
+                playingMatrix[row, col] = number;
+            }
+
+            return number;
         }
     }
 }
