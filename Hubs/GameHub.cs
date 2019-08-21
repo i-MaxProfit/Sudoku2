@@ -50,13 +50,11 @@ namespace Sudoku.Hubs
         //Проверяем переданное значение. Если оно правильное, то записываем его в текущую матрицу
         public void AddNumber(int number, int row, int col)
         {
-            var numberIsCorrect = Matrix.CheckNumber(number, row, col);
+            //Пробуем добавить в текущую матрицу новый номер
+            var result = Matrix.AddNumber(number, row, col);
 
-            if (numberIsCorrect)
+            if (result.IsNumberCorrect)
             {
-                //Добавляем в текущую матрицу новый номер
-                var result = Matrix.AddNumber(number, row, col);
-
                 if (result.IsNumberAdded)
                 {
                     //У всех пользователей устанавливаем правильное значение
@@ -74,6 +72,10 @@ namespace Sudoku.Hubs
                         //Сообщаем всем, что игра закончена
                         Clients.All.onGameOver(Context.ConnectionId);
                     }
+                }
+                else
+                {
+                    //Кто-то чуть раньше успел добавить правильный номер. Ничего не делаем
                 }
             }
             else

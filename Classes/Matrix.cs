@@ -8,12 +8,23 @@ namespace Sudoku.Classes
 {
     public static class Matrix
     {
-        static int[,] solvedMatrix = null;  //Полностью заполненная матрица. С ней будем сравнивать цифры, введенные пользователями
-        static int[,] playingMatrix = null; //Игровая матрица, в которой закрыты ячейки
-        static object fakeLocker = new object();
+        static int[,] solvedMatrix = null;       //Полностью заполненная матрица. С ней будем сравнивать цифры, введенные пользователями
+        static int[,] playingMatrix = null;      //Игровая матрица, в которой закрыты ячейки
+        static object fakeLocker = new object(); //Фейковый объект для блокировки
 
 
-        //GetPlayingMatrix - возвращает текущую игровую матрицу. Если ее нет, то сначала создает новую
+        //GenerateNew - Генерирует новую матрицу по кнопке "Новая игра"
+        public static int[,] GenerateNew(int level)
+        {
+            lock (fakeLocker)
+            {
+                Initialization(level);
+            }
+
+            return playingMatrix;
+        }
+
+        //GetPlayingMatrix - возвращает текущую игровую матрицу. Если ее нет, то сначала создает новую. Вызывается при загрузке страницы
         public static int[,] GetPlayingMatrix()
         {
             if (playingMatrix == null)
@@ -26,41 +37,6 @@ namespace Sudoku.Classes
                     }
                 }
             }
-
-            return playingMatrix;
-        }
-
-        //AddNumber - Проверяем на правильность переданное значение и добавляем его в игровую матрицу, если оно верное. Вызывается, когда пользователь ввел какое-то число
-        public static AddNumberModel AddNumber(int number, int row, int col)
-        {
-            lock (fakeLocker)
-            {
-                //Ячейка еще пустая
-                if (playingMatrix[row, col] == 0)
-                {
-                    playingMatrix[row, col] = number;
-
-                    return new AddNumberModel()
-                    {
-                        IsNumberAdded = true,
-                        IsGameOver = !playingMatrix.ContainsValue(0)
-                    };
-                }
-                //Кто-то уже успел чуть раньше заполнить эту ячейку
-                else
-                {
-                    return new AddNumberModel() { IsNumberAdded = false };
-                }
-            }
-        }
-
-        //GenerateNew - Генерирует новую матрицу по кнопке "Новая игра"
-        public static int[,] GenerateNew(int level)
-        {
-            lock (fakeLocker)
-            {
-                Initialization(level);
-            }            
 
             return playingMatrix;
         }
@@ -128,10 +104,39 @@ namespace Sudoku.Classes
             }
         }
 
-        //CheckNumber - Сравниваем переданное значение со значением из решенной таблицы
-        public static bool CheckNumber(int number, int row, int col)
+        //AddNumber - Проверяем на правильность переданное значение и добавляем его в игровую матрицу, если оно верное. Вызывается, когда пользователь ввел какое-то число
+        public static AddNumberModel AddNumber(int number, int row, int col)
         {
-            return solvedMatrix[row,col] == number;
+            var result = new AddNumberModel();
+
+            lock (fakeLocker)
+            {
+                //Узнаем правильность значения. Сравние его со значением из заполненой таблицы
+                if (solvedMatrix[row, col] == number)
+                {
+                    //Ячейка пока пустая
+                    if (playingMatrix[row, col] == 0)
+                    {
+                        playingMatrix[row, col] = number;
+
+                        result.IsNumberCorrect = true;
+                        result.IsNumberAdded = true;
+                        result.IsGameOver = !playingMatrix.ContainsValue(0);
+                    }
+                    //Кто-то уже успел чуть раньше заполнить эту ячейку
+                    else
+                    {
+                        result.IsNumberCorrect = true;
+                        result.IsNumberAdded = false;
+                    }
+                }
+                else
+                {
+                    result.IsNumberCorrect = false;
+                }
+            }
+
+            return result;
         }
 
         //GetNumber - возвращает значение по переданным координатам. Используется, когда пользователь нажал "Подсказка"
