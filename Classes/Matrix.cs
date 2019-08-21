@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Sudoku.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -9,7 +10,6 @@ namespace Sudoku.Classes
     {
         static int[,] solvedMatrix = null;  //Полностью заполненная таблица. С ней будем сравнивать цифры, введенные пользователями
         static int[,] playingMatrix = null; //Игровая таблица, в которой закрыты ячейки
-        static bool gameOver = true;
         static object fakeLocker = new object();
 
 
@@ -31,7 +31,7 @@ namespace Sudoku.Classes
         }
 
         //AddNumber - Проверяем на правильность переданное значение и добавляем его в игровую таблицу, если оно верное. Вызывается, когда пользователь ввел какое-то число
-        public static bool AddNumber(int number, int row, int col)
+        public static AddNumberModel AddNumber(int number, int row, int col)
         {
             lock (fakeLocker)
             {
@@ -40,15 +40,16 @@ namespace Sudoku.Classes
                 {
                     playingMatrix[row, col] = number;
 
-                    //Проверяем закончена ли игра
-                    gameOver = !playingMatrix.ContainsValue(0);
-
-                    return true;
+                    return new AddNumberModel()
+                    {
+                        IsNumberAdded = true,
+                        IsGameOver = !playingMatrix.ContainsValue(0)
+                    };
                 }
                 //Кто-то уже успел чуть раньше заполнить эту ячейку
                 else
-                {                    
-                    return false;
+                {
+                    return new AddNumberModel() { IsNumberAdded = false };
                 }
             }
         }
@@ -64,7 +65,6 @@ namespace Sudoku.Classes
         //Initialization - генерирует новую игровую матрицу
         private static void Initialization(int level = 25)
         {
-            gameOver = false;
             solvedMatrix = new int[9, 9];
             playingMatrix = new int[9, 9];
 
@@ -136,12 +136,5 @@ namespace Sudoku.Classes
         {
             return solvedMatrix[row, col];
         }
-
-        //IsGameOver - возвращает признака окончания текущей игры
-        public static bool IsGameOver()
-        {
-            return gameOver;
-        }
-
     }
 }

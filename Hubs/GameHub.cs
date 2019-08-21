@@ -11,7 +11,7 @@ namespace Sudoku.Hubs
 {
     public class GameHub : Hub
     {
-        static List<Player> players = new List<Player>();
+        static List<PlayerModel> players = new List<PlayerModel>();
         static object fakeLocker = new object();
 
         //Подключение нового пользователя
@@ -23,7 +23,7 @@ namespace Sudoku.Hubs
             {
                 var userName = string.Format("Игрок №{0}", players.Count() + 1);
 
-                players.Add(new Player { ConnectionId = id, Name = userName, WinsCount = 0 });
+                players.Add(new PlayerModel { ConnectionId = id, Name = userName, WinsCount = 0 });
 
                 //Посылаем сообщение текущему пользователю
                 Clients.Caller.onConnected(userName, id);
@@ -51,31 +51,29 @@ namespace Sudoku.Hubs
         //Проверяем переданное значение. Если оно правильное, то записываем его в текущую матрицу
         public void AddNumber(int number, int row, int col)
         {
-            var id = Context.ConnectionId;
-
             var numberIsCorrect = Matrix.CheckNumber(number, row, col);
 
             if (numberIsCorrect)
             {
                 //Добавляем в текущую матрицу новый номер
-                var numberAdded = Matrix.AddNumber(number, row, col);
+                var result = Matrix.AddNumber(number, row, col);
 
-                if (numberAdded)
+                if (result.IsNumberAdded)
                 {
                     //У всех пользователей устанавливаем правильное значение
                     Clients.All.onCorrentNumberAdded(number, row, col);
 
                     //Проверяем закончена ли игра
-                    if (Matrix.IsGameOver())
+                    if (result.IsGameOver)
                     {
-                        var player = players.FirstOrDefault(x => x.ConnectionId == id);
+                        var player = players.FirstOrDefault(x => x.ConnectionId == Context.ConnectionId);
                         if (player != null)
                         {
                             player.WinsCount++;
                         }
 
                         //Сообщаем всем, что игра закончена
-                        Clients.All.onGameOver(id);
+                        Clients.All.onGameOver(Context.ConnectionId);
                     }
                 }
             }
