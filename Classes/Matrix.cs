@@ -8,6 +8,10 @@ namespace Sudoku.Classes
 {
     public static class Matrix
     {
+        //***********************************************************
+        //Проект доступен по адресу http://sudoku2.azurewebsites.net/
+        //***********************************************************
+
         static int[,] solvedMatrix = null;       //Полностью заполненная матрица. С ней будем сравнивать цифры, введенные пользователями
         static int[,] playingMatrix = null;      //Игровая матрица, в которой закрыты ячейки
         static object fakeLocker = new object(); //Фейковый объект для блокировки
