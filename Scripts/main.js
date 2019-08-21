@@ -184,6 +184,21 @@ $(function () {
             game.server.getResults();
         });
 
+        //Кнопка: от 1 до 9
+        $('.number').click(function () {
+            var focusedCell = $('.focused')[0];
+            if (focusedCell === undefined) {
+                Swal.fire('Ошибка!', 'Ячейка не выбрана.', 'error');
+            } else {
+                let val = $(this).text();
+                let id = $(focusedCell).prop('id');
+                let row = id.substring(1, 2);
+                let col = id.substring(2, 3);
+
+                game.server.addNumber(val, row, col);
+            }
+        });
+
         //Получаем текущую игру или создаем новую
         game.server.getPlayingMatrix();
 

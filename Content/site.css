@@ -92,6 +92,8 @@ button {
     width: 100%;
     padding: 4px;
     margin-bottom: 10px;
+    height: 50px;
+    font-size: large;
 }
 
 .matrix {
@@ -108,4 +110,17 @@ button {
 
 .result-tbody {
     border: none;
+}
+
+.left-button {
+    padding-right: 3px;
+}
+
+.middle-button {
+    padding-right: 6px;
+    padding-left: 6px;
+}
+
+.right-button {
+    padding-left: 3px;
 }

@@ -115,11 +115,11 @@ namespace Sudoku.Classes
 
             lock (fakeLocker)
             {
-                //Узнаем правильность значения. Сравние его со значением из заполненой таблицы
-                if (solvedMatrix[row, col] == number)
+                //Ячейка пока пустая
+                if (playingMatrix[row, col] == 0)
                 {
-                    //Ячейка пока пустая
-                    if (playingMatrix[row, col] == 0)
+                    //Узнаем правильность значения. Сравние его со значением из заполненой таблицы
+                    if (solvedMatrix[row, col] == number)
                     {
                         playingMatrix[row, col] = number;
 
@@ -127,16 +127,16 @@ namespace Sudoku.Classes
                         result.IsNumberAdded = true;
                         result.IsGameOver = !playingMatrix.ContainsValue(0);
                     }
-                    //Кто-то уже успел чуть раньше заполнить эту ячейку
                     else
                     {
-                        result.IsNumberCorrect = true;
-                        result.IsNumberAdded = false;
+                        result.IsNumberCorrect = false;
                     }
                 }
+                //Кто-то уже успел чуть раньше заполнить эту ячейку
                 else
                 {
-                    result.IsNumberCorrect = false;
+                    result.IsNumberCorrect = true;
+                    result.IsNumberAdded = false;
                 }
             }
 
