@@ -57,7 +57,10 @@ namespace Sudoku.Classes
         //GenerateNew - Генерирует новую матрицу по кнопке "Новая игра"
         public static int[,] GenerateNew(int level)
         {
-            Initialization(level);
+            lock (fakeLocker)
+            {
+                Initialization(level);
+            }            
 
             return playingMatrix;
         }
