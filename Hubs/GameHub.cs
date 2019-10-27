@@ -12,7 +12,7 @@ namespace Sudoku.Hubs
     public class GameHub : Hub
     {
         //***********************************************************
-        //Проект доступен по адресу http://sudoku2.azurewebsites.net/
+        //Проект доступен по адресу http://185.41.187.11/
         //***********************************************************
 
         static List<PlayerModel> players = new List<PlayerModel>();
