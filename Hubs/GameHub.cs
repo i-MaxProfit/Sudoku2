@@ -119,14 +119,6 @@ namespace Sudoku.Hubs
         //Отключение пользователя
         public override Task OnDisconnected(bool stopCalled)
         {
-            //var item = players.FirstOrDefault(x => x.ConnectionId == Context.ConnectionId);
-
-            //if (item != null)
-            //{
-            //    //Players.Remove(item);
-            //    Clients.All.onUserDisconnected(Context.ConnectionId, item.Name);
-            //}
-
             return base.OnDisconnected(stopCalled);
         }
     }
